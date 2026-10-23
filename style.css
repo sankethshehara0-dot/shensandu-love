@@ -8,3 +8,15 @@ header{display:flex;gap:10px;padding:12px;background:var(--card);align-items:cen
 #remoteVideo{width:100%;height:100%;object-fit:cover} #localVideo{position:absolute;bottom:80px;right:15px;width:110px;height:150px;border-radius:15px;border:2px solid var(--love)}
 .contact-card{display:flex;gap:10px;padding:12px;background:var(--card);border-bottom:1px solid #222;align-items:center}
 button{cursor:pointer;border:none;padding:10px;border-radius:10px}
+.my-msg {
+  align-self: flex-end;
+  background: linear-gradient(135deg,#ff2a6d,#ff7a9e);
+  color:white; border-radius:20px 20px 2px 20px;
+  padding:10px 16px; margin:6px; max-width:75%;
+}
+.other-msg {
+  align-self:flex-start;
+  background:#2a2a2a; color:white;
+  border-radius:20px 20px 20px 2px;
+  padding:10px 16px; margin:6px; max-width:75%;
+}
