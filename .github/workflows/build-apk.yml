@@ -1,22 +1,47 @@
 name: Build ShenSandu APK
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with: { node-version: '18' }
-      - uses: actions/setup-java@v3
-        with: { distribution: 'temurin', java-version: '17' }
-      - run: npm i -g @capacitor/cli
-      - run: |
+      - name: Checkout code
+        uses: actions/checkout@v4
+     
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+     
+      - name: Setup Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+     
+      - name: Install Capacitor
+        run: npm i -g @capacitor/cli
+     
+      - name: Init Capacitor Project
+        run: |
           npm init -y
-          npx cap init ShenSandu com.shehara.shensandu --web-dir=.
-          npx cap add android
-          npx cap copy android
-          cd android && chmod +x gradlew && ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v4
+          npx cap init ShenSandu com.shehara.shensandu --web-dir=. || true
+          npm install @capacitor/core @capacitor/android
+          npx cap add android || true
+          npx cap copy android || true
+     
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+     
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: ShenSandu-APK-Final
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
