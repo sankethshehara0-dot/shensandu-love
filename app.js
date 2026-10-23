@@ -51,6 +51,33 @@ function listenPartner(){
     }
   });
 }
+document.getElementById("attachBtn").onclick = () => document.getElementById("fileInput").click();
+
+fileInput.onchange = async (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  // Firebase Storage එකට upload කරනවා
+  const storageRef = ref(storage, `chats/${Date.now()}_${file.name}`);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+ 
+  // message එකක් විදියට save කරනවා
+  addDoc(messagesRef, {
+    text: file.type.startsWith("image") ? `<img src="${url}" style="max-width:200px;border-radius:12px">` : `<video src="${url}" controls style="max-width:200px;border-radius:12px"></video>`,
+    sender: myName,
+    timestamp: serverTimestamp(),
+    type: "media"
+  });
+}
+ call button එකට
+document.getElementById("callBtn").onclick = () => {
+  const room = "ShenSandu_Love_" + "a02741"; // ඔයාගේ room code එක
+  window.open(`https://meet.jit.si/${room}`, "_blank");
+}
+// video call එකට
+document.getElementById("videoCallBtn").onclick = () => {
+  window.open(`https://meet.jit.si/ShenSandu_Love_a02741#config.startWithVideoMuted=false`, "_blank");
+}
 
 function setupConn(){ conn.on('open',()=>{ conn.on('data', d=>{ saveLocal({text:d,from:'other',time:Date.now()}); renderChats(); }); }); }
 function saveLocal(m){ let c=JSON.parse(localStorage.getItem('chats')||"[]"); c.push(m); localStorage.setItem('chats',JSON.stringify(c)); }
