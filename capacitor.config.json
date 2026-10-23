@@ -1,0 +1,6 @@
+{
+  "appId": "com.shehara.shensandu",
+  "appName": "ShenSandu",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
