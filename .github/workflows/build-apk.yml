@@ -9,30 +9,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+     
       - uses: actions/setup-java@v4
-        with: { distribution: 'temurin', java-version: '17' }
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+     
       - uses: actions/setup-node@v4
         with: { node-version: '18' }
      
-      - name: Prepare Web Files
+      - name: Prepare Web
         run: |
-          rm -rf android www node_modules
+          rm -rf android www ~/.gradle/caches
           mkdir www
           cp index.html app.js style.css manifest.json www/ || true
           cp -r *.png *.jpg www/ 2>/dev/null || true
-          ls www/
      
-      - name: Build APK
+      - name: Install & Build
         run: |
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           echo '{"appId":"com.shehara.shensandu","appName":"ShenSandu","webDir":"www"}' > capacitor.config.json
           npx cap add android
           npx cap copy
-          cd android && chmod +x gradlew && ./gradlew assembleDebug
+          cd android
+          chmod +x gradlew
+          ./gradlew clean assembleDebug --no-daemon --stacktrace
      
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ShenSandu-APK-FINAL
+          name: ShenSandu-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
