@@ -77,6 +77,28 @@ function renderChats(){
   area.scrollTop=area.scrollHeight;
 }
 
+let renderedIds = new Set();
+
+onSnapshot(query(messagesRef, orderBy("timestamp")), (snapshot) => {
+  const container = document.getElementById("messages");
+  container.innerHTML = ""; // අනිවාර්යයෙන් clear කරන්න
+  renderedIds.clear();
+ 
+  snapshot.forEach((doc) => {
+    if(renderedIds.has(doc.id)) return; // double එක නවත්තනවා
+    renderedIds.add(doc.id);
+    const msg = doc.data();
+    const div = document.createElement("div");
+    div.className = msg.sender === myName ? "my-msg" : "other-msg";
+    div.innerHTML = `
+      <div class="bubble">${msg.text}</div>
+      <span class="time">${new Date(msg.timestamp?.toDate()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+    `;
+    container.appendChild(div);
+  });
+  container.scrollTop = container.scrollHeight;
+});
+
 // Video/Audio + Filters - full logic
 let localStream;
 async function startVideoCall(){
