@@ -8,7 +8,19 @@ const firebaseConfig = {
   messagingSenderId: "783958807706",
   appId: "1:783958807706:web:c44062a8c2efb727b8423",
   measurementId: "G-BPGY51YWW0"
-};
+}
+ // firebase.js එකේ පහලම
+try {
+  const db = getFirestore(app);
+  console.log("Firebase Connected!");
+  document.querySelector(".status")?.replaceChildren("Connected 💖");
+  // or
+  const statusEl = document.getElementById("connectionStatus");
+  if(statusEl) statusEl.innerText = "Connected 💖";
+} catch(e) {
+  console.error("Firebase Error:", e);
+} 
+  ;
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
