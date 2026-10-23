@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShenSandu ❤️</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body class="dark">
+<header><img src="logo.png" height="28"><b>ShenSandu</b><small id="myIdText">Connecting...</small></header>
+<div id="roleSelect" style="padding:20px;text-align:center">
+<h2>Who are you? ❤️</h2>
+<button onclick="selectRole('Shan')">I am Shan 💙</button>
+<button onclick="selectRole('Sandu')">I am Sandu 💖</button>
+<p style="font-size:12px;margin-top:20px">Secret Code: <input id="coupleCodeInput" value="SHANSANDU" style="width:120px"></p>
+<p style="font-size:10px;opacity:.5">Powered by Shehara Manupriya</p>
+</div>
+<div id="mainApp" class="hidden">
+<div id="contactList"></div>
+<div id="chatArea"></div>
+<div class="tabs"><button onclick="showTab('chat')">💬</button><button onclick="startVideoCall()">📹</button><button onclick="startAudioCall()">📞</button><button onclick="showTab('status')">⭕ Status</button><button onclick="showTab('profile')">👤</button><button onclick="showTab('settings')">⚙️</button></div>
+<div class="input-bar"><button onclick="openEmoji()">😊</button><button onclick="attachFile()">📎</button><input id="msgInput" placeholder="I love you..."><button onclick="holdVoice()" id="voiceBtn">🎤</button><button onclick="sendMessage()" style="background:var(--love);color:#fff;border:none;padding:10px 15px;border-radius:20px">❤️</button></div>
+</div>
+<div id="videoScreen" class="hidden">
+<video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay muted playsinline></video>
+<div style="position:absolute;bottom:20px;left:0;right:0;display:flex;justify-content:center;gap:10px">
+<button onclick="setFilter('dog')">🐶</button><button onclick="setFilter('heart')">😍</button><button onclick="setVoiceFilter('chipmunk')">🐿️ Voice</button><button onclick="endCall()" style="background:red">❌</button>
+</div>
+</div>
+<div id="settingsPanel" class="hidden">
+<h3>Settings</h3>
+<label>Dark/White <input type="checkbox" id="darkMode" checked onchange="toggleTheme()"></label>
+<label>Last Seen <select id="lastSeenOpt"><option>Everyone</option><option>Only ShenSandu</option><option>Nobody</option></select></label>
+<label>Message Tone <select><option>Love Tone 1</option><option>Love Tone 2</option></select></label>
+<label>Wallpaper <input type="color" onchange="changeWallpaper(this.value)"></label>
+<label>Block/Unblock <button onclick="toggleBlock()">Block Sandu</button></label>
+</div>
+<script src="app.js"></script>
+</body>
+
+  
+</html>
