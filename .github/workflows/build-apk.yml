@@ -8,40 +8,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
      
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - uses: actions/setup-java@v4
+        with: { distribution: 'temurin', java-version: '17' }
      
-      - name: Setup Node 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
+      - uses: actions/setup-node@v4
+        with: { node-version: '18' }
      
-      - name: Install Capacitor
-        run: npm i -g @capacitor/cli
+      - name: Clean old build
+        run: rm -rf android node_modules package-lock.json capacitor.config.json
      
-      - name: Init Capacitor Project
+      - name: Setup Capacitor
         run: |
           npm init -y
-          npx cap init ShenSandu com.shehara.shensandu --web-dir=. || true
-          npm install @capacitor/core @capacitor/android
-          npx cap add android || true
-          npx cap copy android || true
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          echo '{"appId":"com.shehara.shensandu","appName":"ShenSandu","webDir":".","bundledWebRuntime":false}' > capacitor.config.json
+          npx cap add android
+          npx cap copy android
      
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug
      
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ShenSandu-APK-Final
+          name: ShenSandu-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
